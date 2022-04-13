@@ -14,11 +14,13 @@ import javax.swing.border.Border;
 public class NewJFrame extends javax.swing.JFrame {
    JLabel imagen = new JLabel();
    Border border = BorderFactory.createLineBorder(Color.WHITE);
+   Panel Panel1 = new Panel();
     /**
      * Creates new form NewJFrame
      */
    
     public NewJFrame() {
+        this.getContentPane().add(Panel1);
         this.setUndecorated(true);
         initComponents();
         this.setLocationRelativeTo(null);
