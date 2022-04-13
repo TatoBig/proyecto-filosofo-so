@@ -21,7 +21,6 @@ public class Panel extends JPanel {
      * Creates new form Panel
      */
     public Panel() {
-        initComponents();
         this.setSize(dimension);
         this.setVisible(true);
     }
@@ -46,7 +45,7 @@ public class Panel extends JPanel {
         );
     }// </editor-fold>//GEN-END:initComponents
     @Override
-    public void paint(Graphics g){
+    public void paintComponent(Graphics g){
         Graphics2D c =(Graphics2D) g;
         Color colorBorde = new Color(10,10,10);
         Color colorInterior = new Color(255,255,255);

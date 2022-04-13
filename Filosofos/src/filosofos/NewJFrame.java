@@ -1,8 +1,12 @@
 package filosofos;
 
 import java.awt.Color;
+import java.awt.Image;
 import java.awt.event.WindowEvent;
+import java.util.ArrayList;
 import javax.swing.BorderFactory;
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.border.Border;
 
@@ -15,17 +19,32 @@ public class NewJFrame extends javax.swing.JFrame {
    JLabel imagen = new JLabel();
    Border border = BorderFactory.createLineBorder(Color.WHITE);
    Panel Panel1 = new Panel();
+   ArrayList<Filosofo> listaProcesos = new ArrayList();
+   ArrayList<JLabel> listaLabel = new ArrayList();
     /**
      * Creates new form NewJFrame
      */
    
     public NewJFrame() {
         this.getContentPane().add(Panel1);
-        this.setUndecorated(true);
+        NewJFrame.this.setUndecorated(true);
         initComponents();
-        this.setLocationRelativeTo(null);
-        this.setBackground(new Color(0,0,0,0));
-        this.setVisible(true);
+        NewJFrame.this.setLocationRelativeTo(null);
+        NewJFrame.this.setBackground(new Color(0,0,0,0));
+        NewJFrame.this.setVisible(true);
+        fSTexFieldMD2.setText("");
+    }
+    public class Filosofo extends Thread{
+        private boolean run = false;
+        public void startRunning(){
+           run = true;
+        }
+        public void stopRunning(){
+            run = false;
+        }
+        @Override
+        public void run(){
+        }
     }
 
     /**
@@ -41,6 +60,7 @@ public class NewJFrame extends javax.swing.JFrame {
         fSTexFieldMD2 = new LIB.FSTexFieldMD();
         fSButtonMD1 = new LIB.FSButtonMD();
         jLabel2 = new javax.swing.JLabel();
+        fSButtonMD2 = new LIB.FSButtonMD();
         jLabel1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -72,6 +92,18 @@ public class NewJFrame extends javax.swing.JFrame {
         jLabel2.setFont(new java.awt.Font("SansSerif", 2, 18)); // NOI18N
         jLabel2.setText("Cantidad de filosofos");
 
+        fSButtonMD2.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(153, 153, 255)));
+        fSButtonMD2.setText("Resetear");
+        fSButtonMD2.setColorNormal(new java.awt.Color(255, 255, 255));
+        fSButtonMD2.setColorPressed(new java.awt.Color(255, 255, 255));
+        fSButtonMD2.setColorTextNormal(new java.awt.Color(0, 0, 0));
+        fSButtonMD2.setColorTextPressed(new java.awt.Color(255, 153, 153));
+        fSButtonMD2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                fSButtonMD2ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout fSGradientPanel1Layout = new javax.swing.GroupLayout(fSGradientPanel1);
         fSGradientPanel1.setLayout(fSGradientPanel1Layout);
         fSGradientPanel1Layout.setHorizontalGroup(
@@ -89,7 +121,10 @@ public class NewJFrame extends javax.swing.JFrame {
                             .addGroup(fSGradientPanel1Layout.createSequentialGroup()
                                 .addGap(19, 19, 19)
                                 .addComponent(jLabel2)))
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, fSGradientPanel1Layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(fSButtonMD2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
         fSGradientPanel1Layout.setVerticalGroup(
@@ -101,7 +136,9 @@ public class NewJFrame extends javax.swing.JFrame {
                 .addComponent(fSTexFieldMD2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(fSButtonMD1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(23, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(fSButtonMD2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(13, Short.MAX_VALUE))
         );
 
         jLabel1.setBackground(new java.awt.Color(204, 204, 255));
@@ -135,7 +172,7 @@ public class NewJFrame extends javax.swing.JFrame {
                 .addComponent(jLabel1)
                 .addGap(18, 18, 18)
                 .addComponent(fSGradientPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(185, Short.MAX_VALUE))
+                .addContainerGap(143, Short.MAX_VALUE))
         );
 
         pack();
@@ -151,8 +188,37 @@ public class NewJFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_fSTexFieldMD2ActionPerformed
 
     private void fSButtonMD1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fSButtonMD1ActionPerformed
-        //Añadir la cantidad de platos necesarios
+        if(!"".equals(fSTexFieldMD2.getText())){
+            Integer a = Integer.parseInt(fSTexFieldMD2.getText());
+            for(int i=0; i<a;i++){
+            //Añadir la cantidad de platos necesarios
+                JLabel x= new JLabel("Plato Filosofo " + (i+1)); 
+                x.setBounds(20, 20, 50, 50); // esto es lo que se buscará corregir para que quede circular
+                ImageIcon imagen = new ImageIcon("src/Imagenes/1.png");
+                Icon icono = new ImageIcon(imagen.getImage().getScaledInstance( x.getWidth(), x.getHeight(), Image.SCALE_DEFAULT));
+                x.setIcon(icono);
+                this.Panel1.add(x);
+                x.setBorder(border);
+                listaLabel.add(x);
+                // aquí se deberían crear los filosofos
+            }
+            fSButtonMD1.setEnabled(false);
+            fSButtonMD2.setEnabled(true);
+        }
     }//GEN-LAST:event_fSButtonMD1ActionPerformed
+
+    private void fSButtonMD2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fSButtonMD2ActionPerformed
+        Integer a = Integer.parseInt(fSTexFieldMD2.getText());
+        fSTexFieldMD2.setText("");
+        for (int i = 0; i < a; i++) {
+            this.Panel1.remove(listaLabel.get(i));
+        }
+        this.Panel1.repaint();
+        //System.out.println(listaLabel.size());
+        listaLabel.removeAll(listaLabel);
+        //System.out.println(listaLabel.size());
+        fSButtonMD1.setEnabled(true);
+    }//GEN-LAST:event_fSButtonMD2ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -191,6 +257,7 @@ public class NewJFrame extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private LIB.FSButtonMD fSButtonMD1;
+    private LIB.FSButtonMD fSButtonMD2;
     private LIB.FSGradientPanel fSGradientPanel1;
     private LIB.FSTexFieldMD fSTexFieldMD2;
     private javax.swing.JLabel jLabel1;
