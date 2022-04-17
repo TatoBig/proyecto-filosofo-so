@@ -14,37 +14,25 @@ import javax.swing.border.Border;
  *
  * @author Usuario 1
  */
-
 public class NewJFrame extends javax.swing.JFrame {
-   JLabel imagen = new JLabel();
-   Border border = BorderFactory.createLineBorder(Color.WHITE);
-   Panel Panel1 = new Panel();
-   ArrayList<Filosofo> listaProcesos = new ArrayList();
-   ArrayList<JLabel> listaLabel = new ArrayList();
+
+    JLabel imagen = new JLabel();
+    Border border = BorderFactory.createLineBorder(Color.WHITE);
+    Panel Panel1 = new Panel();
+    ArrayList<JLabel> listaLabel = new ArrayList();
+    Monitor monitor = Monitor.getInstance();
+
     /**
      * Creates new form NewJFrame
      */
-   
     public NewJFrame() {
         this.getContentPane().add(Panel1);
         NewJFrame.this.setUndecorated(true);
         initComponents();
         NewJFrame.this.setLocationRelativeTo(null);
-        NewJFrame.this.setBackground(new Color(0,0,0,0));
+        NewJFrame.this.setBackground(new Color(0, 0, 0, 0));
         NewJFrame.this.setVisible(true);
         fSTexFieldMD2.setText("");
-    }
-    public class Filosofo extends Thread{
-        private boolean run = false;
-        public void startRunning(){
-           run = true;
-        }
-        public void stopRunning(){
-            run = false;
-        }
-        @Override
-        public void run(){
-        }
     }
 
     /**
@@ -188,20 +176,21 @@ public class NewJFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_fSTexFieldMD2ActionPerformed
 
     private void fSButtonMD1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fSButtonMD1ActionPerformed
-        if(!"".equals(fSTexFieldMD2.getText())){
-            Integer a = Integer.parseInt(fSTexFieldMD2.getText());
-            for(int i=0; i<a;i++){
-            //Añadir la cantidad de platos necesarios
-                JLabel x= new JLabel("Plato Filosofo " + (i+1)); 
+        if (!"".equals(fSTexFieldMD2.getText())) {
+            Integer cantidadFilosofos = Integer.parseInt(fSTexFieldMD2.getText());
+            for (int i = 0; i < cantidadFilosofos; i++) {
+                //Añadir la cantidad de platos necesarios
+                JLabel x = new JLabel("Plato Filosofo " + (i + 1));
                 x.setBounds(20, 20, 50, 50); // esto es lo que se buscará corregir para que quede circular
                 ImageIcon imagen = new ImageIcon("src/Imagenes/1.png");
-                Icon icono = new ImageIcon(imagen.getImage().getScaledInstance( x.getWidth(), x.getHeight(), Image.SCALE_DEFAULT));
+                Icon icono = new ImageIcon(imagen.getImage().getScaledInstance(x.getWidth(), x.getHeight(), Image.SCALE_DEFAULT));
                 x.setIcon(icono);
                 this.Panel1.add(x);
                 x.setBorder(border);
                 listaLabel.add(x);
                 // aquí se deberían crear los filosofos
             }
+            monitor.addFilosofos(cantidadFilosofos);
             fSButtonMD1.setEnabled(false);
             fSButtonMD2.setEnabled(true);
         }
