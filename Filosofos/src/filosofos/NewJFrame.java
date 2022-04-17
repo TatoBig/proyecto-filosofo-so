@@ -10,6 +10,8 @@ import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.border.Border;
 import java.awt.Graphics;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JPanel;
 
 /**
@@ -21,11 +23,14 @@ public class NewJFrame extends javax.swing.JFrame {
     ImagenFondo fondo = new ImagenFondo();
     JLabel imagen = new JLabel();
     Border border = BorderFactory.createLineBorder(Color.WHITE);
+    Border border2 = BorderFactory.createLineBorder(Color.BLUE, 4, true);
     Panel Panel1 = new Panel();
     ArrayList<JLabel> listaLabel = new ArrayList();
     ArrayList<Filosofo> listaProcesos = new ArrayList();
     ArrayList<JLabel> listatenedores = new ArrayList();
     Monitor monitor = Monitor.getInstance();
+    IdFilosofo idF = new IdFilosofo();
+    int anterior =0,actual=0;
 
     /**
      * Creates new form NewJFrame
@@ -39,7 +44,38 @@ public class NewJFrame extends javax.swing.JFrame {
         NewJFrame.this.setVisible(true);
         fSTexFieldMD2.setText("");
     }
-
+    
+    public class IdFilosofo extends Thread{
+        private boolean run = false;
+        public void startRunning(){
+           run = true;
+        }
+        public void stopRunning(){
+            run = false;
+        }
+        @Override
+        public void run(){
+            while(run==true){
+                actual=monitor.getEsta();
+                System.out.print(actual);
+                System.out.print(" ");
+                System.out.print(anterior);
+                System.out.println();
+                if(actual!=anterior){
+                    listaLabel.get(anterior).setBorder(border);
+                    listaLabel.get(actual).setBorder(border2);
+                    
+                    anterior=actual;
+                }
+                
+            }
+            try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException ex) {
+                    Logger.getLogger(NewJFrame.class.getName()).log(Level.SEVERE, null, ex);
+                }
+        }
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -256,6 +292,8 @@ public class NewJFrame extends javax.swing.JFrame {
                 // aquí se deberían crear los filosofos
             }
             monitor.addFilosofos(cantidadFilosofos);
+            idF.startRunning();
+            idF.start();
             fSButtonMD1.setEnabled(false);
             fSButtonMD2.setEnabled(true);
         }

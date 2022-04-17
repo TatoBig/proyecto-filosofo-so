@@ -17,7 +17,7 @@ import java.util.logging.Logger;
 public class Monitor {
 
     private static Monitor instance;
-
+    private static int estaCom=0;
     public Monitor() {
     }
 
@@ -28,7 +28,11 @@ public class Monitor {
     public static Monitor getInstance() {
         return instance;
     }
-
+    
+    public static int getEsta() {
+        return estaCom;
+    }
+    
     private ArrayList<Tenedor> listaTenedores = new ArrayList();
     private ArrayList<Filosofo> listaFilosofos = new ArrayList();
 
@@ -64,7 +68,8 @@ public class Monitor {
     public synchronized void eat(Integer id) {
         listaFilosofos.get(id).setComiendo(true);
         try {
-            System.out.println("El filosofo que esta comiendo es el: " + id);
+            //System.out.println("El filosofo que esta comiendo es el: " + id);
+            estaCom=id;
             sleep(2000);
         } catch (InterruptedException ex) {
             Logger.getLogger(Filosofo.class.getName()).log(Level.SEVERE, null, ex);
