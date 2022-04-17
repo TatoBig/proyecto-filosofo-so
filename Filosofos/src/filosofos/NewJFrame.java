@@ -9,24 +9,29 @@ import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.border.Border;
+import java.awt.Graphics;
+import javax.swing.JPanel;
 
 /**
  *
  * @author Usuario 1
  */
 public class NewJFrame extends javax.swing.JFrame {
-
+    
+    ImagenFondo fondo = new ImagenFondo();
     JLabel imagen = new JLabel();
     Border border = BorderFactory.createLineBorder(Color.WHITE);
     Panel Panel1 = new Panel();
     ArrayList<JLabel> listaLabel = new ArrayList();
+    ArrayList<Filosofo> listaProcesos = new ArrayList();
+    ArrayList<JLabel> listatenedores = new ArrayList();
     Monitor monitor = Monitor.getInstance();
 
     /**
      * Creates new form NewJFrame
      */
     public NewJFrame() {
-        this.getContentPane().add(Panel1);
+        this.setContentPane(fondo);
         NewJFrame.this.setUndecorated(true);
         initComponents();
         NewJFrame.this.setLocationRelativeTo(null);
@@ -176,18 +181,78 @@ public class NewJFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_fSTexFieldMD2ActionPerformed
 
     private void fSButtonMD1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fSButtonMD1ActionPerformed
-        if (!"".equals(fSTexFieldMD2.getText())) {
+        if(!"".equals(fSTexFieldMD2.getText())){
             Integer cantidadFilosofos = Integer.parseInt(fSTexFieldMD2.getText());
+            float angulos;//Distancia entre angulos de filosofos
+            float angulos2;
+            
+            float angulostenedor;//Distancia entre angulos de tenedores
+            float angulostenedor2;
+            
+            float dis; //Distancia promedio entre platos
+            
+            //Conseguir distancia de Angulos entre cada plato
+            angulos = 360/cantidadFilosofos;
+            angulos2 = angulos;
+            
+            //Calcilo de distancia entre platos
+            dis = angulos/2;
+            
+            angulostenedor = angulos + dis;
+            angulostenedor2 = angulostenedor;
+                       
+            //int aux = 1;
             for (int i = 0; i < cantidadFilosofos; i++) {
+
+                //Obtener su valor en Radianes
+                double b = Math.toRadians(angulos2);
+                double t = Math.toRadians(angulostenedor2);
+
+                //Valor para los ejes
+                double ejex = (200 * Math.cos(b)) +200;
+                double ejey = (200 * Math.sin(b))+200;
+
+                double ejetx = (200 * Math.cos(t)) +200;
+                double ejety = (200 * Math.sin(t))+200;
+                
+                //Guarda los valores como enteros para poder posicionar en circulo
+                int ix = (int) Math.round(ejex);
+                int iy = (int) Math.round(ejey);
+                
+                int itx = (int) Math.round(ejetx);
+                int ity = (int) Math.round(ejety);
+                
+                /*System.out.println("Circulo "+ aux);
+                
+                System.out.println("eje x " + ix);
+                System.out.println("eje y " + iy);
+                
+                aux++;*/
+                
                 //Añadir la cantidad de platos necesarios
                 JLabel x = new JLabel("Plato Filosofo " + (i + 1));
-                x.setBounds(20, 20, 50, 50); // esto es lo que se buscará corregir para que quede circular
+                x.setBounds(ix, iy, 30, 30);// esto es lo que se buscará corregir para que quede circular
                 ImageIcon imagen = new ImageIcon("src/Imagenes/1.png");
                 Icon icono = new ImageIcon(imagen.getImage().getScaledInstance(x.getWidth(), x.getHeight(), Image.SCALE_DEFAULT));
                 x.setIcon(icono);
-                this.Panel1.add(x);
+                this.add(x);
                 x.setBorder(border);
                 listaLabel.add(x);
+                
+                //Añadir la cantidad de tenedores necesarios
+                
+                JLabel tenedor = new JLabel();
+                tenedor.setBounds(itx, ity, 30, 30);
+                ImageIcon imagen2 = new ImageIcon("src/Imagenes/tenedor.png");
+                Icon iconot = new ImageIcon(imagen2.getImage().getScaledInstance(tenedor.getWidth(), tenedor.getHeight(), Image.SCALE_DEFAULT));
+                tenedor.setIcon(iconot);
+                this.add(tenedor);
+                tenedor.setBorder(border);
+                listatenedores.add(tenedor);
+                
+                //Suma para agregar siguiente plato y tenedor
+                angulos2 = angulos2 + angulos;
+                angulostenedor2 = angulostenedor2 + angulos;
                 // aquí se deberían crear los filosofos
             }
             monitor.addFilosofos(cantidadFilosofos);
@@ -200,11 +265,13 @@ public class NewJFrame extends javax.swing.JFrame {
         Integer a = Integer.parseInt(fSTexFieldMD2.getText());
         fSTexFieldMD2.setText("");
         for (int i = 0; i < a; i++) {
-            this.Panel1.remove(listaLabel.get(i));
+            this.remove(listaLabel.get(i));
+            this.remove(listatenedores.get(i));
         }
-        this.Panel1.repaint();
+        this.repaint();
         //System.out.println(listaLabel.size());
         listaLabel.removeAll(listaLabel);
+        listatenedores.removeAll(listatenedores);
         //System.out.println(listaLabel.size());
         fSButtonMD1.setEnabled(true);
     }//GEN-LAST:event_fSButtonMD2ActionPerformed
@@ -252,4 +319,14 @@ public class NewJFrame extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     // End of variables declaration//GEN-END:variables
+    class ImagenFondo extends JPanel{
+        private Image imagen2;
+        @Override
+        public void paint(Graphics g){
+            imagen2 = new ImageIcon(getClass().getResource("circulo.png")).getImage();
+            g.drawImage(imagen2, 0, 0, 440, 440, this);
+            setOpaque(false);
+            super.paint(g);
+        }
+    }
 }
