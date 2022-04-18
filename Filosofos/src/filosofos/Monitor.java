@@ -42,7 +42,16 @@ public class Monitor {
         for (int i = 0; i < listaFilosofos.size(); i++) {
             listaFilosofos.get(i).start();
             listaFilosofos.get(i).setActive(true);
+            listaTenedores.get(i).setIsActive(false);
         }
+    }
+    
+    public void eliminarFilosofos(){
+        for (int i = 0; i < listaFilosofos.size(); i++) {
+            listaFilosofos.get(i).stop();
+        }
+        listaFilosofos.removeAll(listaFilosofos);
+        listaTenedores.removeAll(listaTenedores);
     }
 
     public ArrayList<Tenedor> getListaTenedores() {
@@ -62,13 +71,32 @@ public class Monitor {
     }
 
     public synchronized void eat(Integer id) {
-        listaFilosofos.get(id).setComiendo(true);
-        try {
-            System.out.println("El filosofo que esta comiendo es el: " + id);
-            sleep(2000);
-        } catch (InterruptedException ex) {
-            Logger.getLogger(Filosofo.class.getName()).log(Level.SEVERE, null, ex);
+        if (id == 0) {
+            if (!listaTenedores.get(id).getIsActive() && !listaTenedores.get(listaTenedores.size() - 1).getIsActive()) {
+                System.out.println("Filosofo: " + id + " come con los tenedores: " + id + " y " + (listaTenedores.size() - 1));
+                listaTenedores.get(id).setIsActive(true);
+                listaTenedores.get(listaTenedores.size() - 1).setIsActive(true);
+                listaFilosofos.get(id).setComiendo(true);
+            }
+        } else {
+            if (!listaTenedores.get(id).getIsActive() && !listaTenedores.get(id - 1).getIsActive()) {
+                System.out.println("Filosofo: " + id + " come con los tenedores: " + id + " y " + (id - 1));
+                listaTenedores.get(id).setIsActive(true);
+                listaTenedores.get(id - 1).setIsActive(true);
+                listaFilosofos.get(id).setComiendo(true);
+            }
         }
-        listaFilosofos.get(id).setComiendo(false);
     }
+    
+    public void devolverTenedores(Integer id) {
+        if (id == 0) {
+            listaTenedores.get(id).setIsActive(false);
+            listaTenedores.get(listaTenedores.size() - 1).setIsActive(false);
+
+        } else {
+            listaTenedores.get(id).setIsActive(false);
+            listaTenedores.get(id - 1).setIsActive(false);
+        }
+    }
+    
 }

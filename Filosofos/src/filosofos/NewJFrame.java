@@ -207,6 +207,7 @@ public class NewJFrame extends javax.swing.JFrame {
         listaLabel.removeAll(listaLabel);
         //System.out.println(listaLabel.size());
         fSButtonMD1.setEnabled(true);
+        monitor.eliminarFilosofos();
     }//GEN-LAST:event_fSButtonMD2ActionPerformed
 
     /**
