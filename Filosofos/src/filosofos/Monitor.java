@@ -17,7 +17,6 @@ import java.util.logging.Logger;
 public class Monitor {
 
     private static Monitor instance;
-    private static int estaCom=0;
     public Monitor() {
     }
 
@@ -27,10 +26,6 @@ public class Monitor {
 
     public static Monitor getInstance() {
         return instance;
-    }
-    
-    public static int getEsta() {
-        return estaCom;
     }
     
     private ArrayList<Tenedor> listaTenedores = new ArrayList();
@@ -46,13 +41,12 @@ public class Monitor {
         for (int i = 0; i < listaFilosofos.size(); i++) {
             listaFilosofos.get(i).start();
             listaFilosofos.get(i).setActive(true);
-            listaTenedores.get(i).setIsActive(false);
         }
     }
     
     public void eliminarFilosofos(){
         for (int i = 0; i < listaFilosofos.size(); i++) {
-            listaFilosofos.get(i).stop();
+            listaFilosofos.get(i).setActive(false);
         }
         listaFilosofos.removeAll(listaFilosofos);
         listaTenedores.removeAll(listaTenedores);
