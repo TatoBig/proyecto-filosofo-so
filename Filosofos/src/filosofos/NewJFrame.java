@@ -46,34 +46,30 @@ public class NewJFrame extends javax.swing.JFrame {
     }
     
     public class IdFilosofo extends Thread{
-        private boolean run = false;
-        public void startRunning(){
-           run = true;
-        }
-        public void stopRunning(){
-            run = false;
-        }
         @Override
         public void run(){
-            while(run==true){
-                actual=monitor.getEsta();
-                System.out.print(actual);
-                System.out.print(" ");
-                System.out.print(anterior);
-                System.out.println();
-                if(actual!=anterior){
-                    listaLabel.get(anterior).setBorder(border);
-                    listaLabel.get(actual).setBorder(border2);
-                    
-                    anterior=actual;
+            while(true){
+                for (int i = 0; i < monitor.getListaFilosofos().size(); i++) {
+                    if (monitor.getListaFilosofos().get(i).getComiendo()) {
+                         listaLabel.get(i).setBorder(border2);
+
+                    } else {
+                          listaLabel.get(i).setBorder(border);
+                    }
+                    if (monitor.getListaTenedores().get(i).getIsActive()) {
+                         listatenedores.get(i).setBorder(border2);
+
+                    } else {
+                          listatenedores.get(i).setBorder(border);
+                    }
                 }
-                
-            }
-            try {
+                try {
                     Thread.sleep(1000);
                 } catch (InterruptedException ex) {
                     Logger.getLogger(NewJFrame.class.getName()).log(Level.SEVERE, null, ex);
                 }
+            }
+            
         }
     }
     /**
@@ -292,7 +288,6 @@ public class NewJFrame extends javax.swing.JFrame {
                 // aquí se deberían crear los filosofos
             }
             monitor.addFilosofos(cantidadFilosofos);
-            idF.startRunning();
             idF.start();
             fSButtonMD1.setEnabled(false);
             fSButtonMD2.setEnabled(true);

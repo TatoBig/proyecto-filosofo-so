@@ -16,6 +16,7 @@ public class Tenedor {
 
     public Tenedor(Integer tenedorId) {
         this.tenedorId = tenedorId;
+        this.isActive = false;
     }
 
     public Boolean getIsActive() {
