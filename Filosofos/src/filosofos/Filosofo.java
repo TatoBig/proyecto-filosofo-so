@@ -25,6 +25,7 @@ public class Filosofo extends Thread {
         this.active = true;
         this.quantum = 1000;
         this.monitor = Monitor.getInstance();
+        this.comiendo = false;
     }
 
     public Integer getProcessId() {
@@ -61,9 +62,19 @@ public class Filosofo extends Thread {
 
     @Override
     public void run() {
+        System.out.println("Filosofo run");
         while (this.active == true) {
-            System.out.println("Filosofo run");
             monitor.eat(this.processId);
+            if (comiendo) {
+                try {
+                    System.out.println("Filosofo: " + this.processId + " - Comiendo");
+                    sleep(5000);
+                } catch (InterruptedException ex) {
+                    Logger.getLogger(Filosofo.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                this.comiendo = false;
+                monitor.devolverTenedores(this.processId);
+            }
         }
     }
 }

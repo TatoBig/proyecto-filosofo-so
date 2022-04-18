@@ -312,6 +312,7 @@ public class NewJFrame extends javax.swing.JFrame {
         listatenedores.removeAll(listatenedores);
         //System.out.println(listaLabel.size());
         fSButtonMD1.setEnabled(true);
+        monitor.eliminarFilosofos();
     }//GEN-LAST:event_fSButtonMD2ActionPerformed
 
     /**
