@@ -30,6 +30,7 @@ public class NewJFrame extends javax.swing.JFrame {
     ArrayList<JLabel> listatenedores = new ArrayList();
     Monitor monitor = Monitor.getInstance();
     IdFilosofo idF = new IdFilosofo();
+    
     int anterior =0,actual=0;
 
     /**
@@ -39,6 +40,7 @@ public class NewJFrame extends javax.swing.JFrame {
         this.setContentPane(fondo);
         NewJFrame.this.setUndecorated(true);
         initComponents();
+        idF.start();
         NewJFrame.this.setLocationRelativeTo(null);
         NewJFrame.this.setBackground(new Color(0, 0, 0, 0));
         NewJFrame.this.setVisible(true);
@@ -46,11 +48,28 @@ public class NewJFrame extends javax.swing.JFrame {
     }
     
     public class IdFilosofo extends Thread{
+        public Boolean encendido = false;
+        
+        public void apagar() {
+            this.encendido = false;
+        }
+        
+        public void encender() {
+            this.encendido = true;
+        }
+        
         @Override
         public void run(){
-            while(true){
+            
+            while(true) {
+                                        System.out.print("");
+
+                if(encendido){
+                                            System.out.print("");
+
                 for (int i = 0; i < monitor.getListaFilosofos().size(); i++) {
                     if (monitor.getListaFilosofos().get(i).getComiendo()) {
+                        System.out.print("");
                          listaLabel.get(i).setBorder(border2);
 
                     } else {
@@ -63,11 +82,12 @@ public class NewJFrame extends javax.swing.JFrame {
                           listatenedores.get(i).setBorder(border);
                     }
                 }
-                try {
-                    Thread.sleep(1000);
-                } catch (InterruptedException ex) {
-                    Logger.getLogger(NewJFrame.class.getName()).log(Level.SEVERE, null, ex);
-                }
+                    try {
+                        sleep(500);
+                    } catch (InterruptedException ex) {
+                        Logger.getLogger(NewJFrame.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+            }
             }
             
         }
@@ -87,6 +107,7 @@ public class NewJFrame extends javax.swing.JFrame {
         jLabel2 = new javax.swing.JLabel();
         fSButtonMD2 = new LIB.FSButtonMD();
         jLabel1 = new javax.swing.JLabel();
+        jButton1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -169,10 +190,17 @@ public class NewJFrame extends javax.swing.JFrame {
         jLabel1.setBackground(new java.awt.Color(204, 204, 255));
         jLabel1.setFont(new java.awt.Font("MV Boli", 1, 48)); // NOI18N
         jLabel1.setText("X ");
-        jLabel1.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jLabel1.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         jLabel1.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jLabel1MouseClicked(evt);
+            }
+        });
+
+        jButton1.setText("jButton1");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
             }
         });
 
@@ -188,7 +216,10 @@ public class NewJFrame extends javax.swing.JFrame {
                         .addGap(30, 30, 30))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addComponent(fSGradientPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 208, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(20, 20, 20))))
+                        .addGap(20, 20, 20))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(jButton1)
+                        .addGap(107, 107, 107))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -197,7 +228,9 @@ public class NewJFrame extends javax.swing.JFrame {
                 .addComponent(jLabel1)
                 .addGap(18, 18, 18)
                 .addComponent(fSGradientPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(143, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jButton1)
+                .addContainerGap(107, Short.MAX_VALUE))
         );
 
         pack();
@@ -288,7 +321,9 @@ public class NewJFrame extends javax.swing.JFrame {
                 // aquí se deberían crear los filosofos
             }
             monitor.addFilosofos(cantidadFilosofos);
-            idF.start();
+            
+            idF.encender();
+            monitor.encender();
             fSButtonMD1.setEnabled(false);
             fSButtonMD2.setEnabled(true);
         }
@@ -297,18 +332,27 @@ public class NewJFrame extends javax.swing.JFrame {
     private void fSButtonMD2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fSButtonMD2ActionPerformed
         Integer a = Integer.parseInt(fSTexFieldMD2.getText());
         fSTexFieldMD2.setText("");
-        for (int i = 0; i < a; i++) {
+        idF.apagar();
+        monitor.apagar();
+       
+        for (int i = 0; i < listaLabel.size(); i++) {
             this.remove(listaLabel.get(i));
             this.remove(listatenedores.get(i));
         }
+        listatenedores.clear();
+        listaLabel.clear();
+        listaProcesos.clear();
+        
         this.repaint();
         //System.out.println(listaLabel.size());
-        listaLabel.removeAll(listaLabel);
-        listatenedores.removeAll(listatenedores);
         //System.out.println(listaLabel.size());
         fSButtonMD1.setEnabled(true);
         monitor.eliminarFilosofos();
     }//GEN-LAST:event_fSButtonMD2ActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        System.out.println(idF.encendido);
+    }//GEN-LAST:event_jButton1ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -350,6 +394,7 @@ public class NewJFrame extends javax.swing.JFrame {
     private LIB.FSButtonMD fSButtonMD2;
     private LIB.FSGradientPanel fSGradientPanel1;
     private LIB.FSTexFieldMD fSTexFieldMD2;
+    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     // End of variables declaration//GEN-END:variables
